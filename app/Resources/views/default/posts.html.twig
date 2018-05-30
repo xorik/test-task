@@ -20,7 +20,7 @@
                         <ul class="comments">
                             <input type="text" class="form-control" placeholder="Add comment" data-id="{{post.getId()}}">
                             {% for comment in post.getComments() %}
-                                <li>{{comment.getText()}}</li>
+                                <li>{{comment.getText()}} <a href data-id="{{comment.getId()}}">remove</a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -52,19 +52,35 @@
 
           $('#posts').on('keypress', 'input', function (e) {
             if (e.keyCode === 13 && $(this).val().length > 0) {
-              t = this;
+              var t = this;
               $.ajax({
                 type: 'POST',
                 url: '/api/posts/'+$(this).data('id')+'/comments',
                 data: {comment: {text: $(this).val()}},
                 success: function(comment)
                 {
-                  $(t).parent().append('<li>'+comment.text+'</li>');
+                  $(t).parent().append('<li>'+comment.text+' <a href data-id="'+comment.id+'">remove</a></li>');
                   $(t).val('');
                 }
               });
             }
            })
+        });
+
+        $('#posts').on('click', 'ul.comments a', function (e) {
+          e.preventDefault();
+          var t = this;
+          $.ajax({
+            type: 'DELETE',
+            url: '/api/comments/'+$(this).data('id'),
+            success: function()
+            {
+              $(t).parent().remove();
+            },
+            error: function () {
+              alert('access denied');
+            }
+          });
         })
     </script>
 {% endblock %}

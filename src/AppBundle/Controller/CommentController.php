@@ -8,6 +8,8 @@ use AppBundle\Form\CommentType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class CommentController extends FOSRestController
 {
@@ -31,5 +33,23 @@ class CommentController extends FOSRestController
         }
 
         return $form;
+    }
+
+    /**
+     * @Rest\Delete("/api/comments/{comment}")
+     */
+    public function deleteCommentAction(Request $request, Comment $comment)
+    {
+        // Check comment author
+        if ($comment->getAuthor()->getId() !== $this->getUser()->getId()) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->remove($comment);
+        $em->flush();
+
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }
