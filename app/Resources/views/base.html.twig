@@ -11,6 +11,14 @@
     </head>
     <body>
         <br>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-info">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
         {% block body %}{% endblock %}
 
         {% block javascripts %}{% endblock %}
