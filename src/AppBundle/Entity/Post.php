@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,6 +31,13 @@ class Post
     private $content;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="post")
+     */
+    public $comments;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -38,6 +47,7 @@ class Post
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -96,6 +106,16 @@ class Post
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment)
+    {
+        $this->comments->add($comment);
     }
 }
 

@@ -17,10 +17,14 @@
                     <div class="post">
                         <p>{{ post.content }}</p>
 
-                        <div class="comments">
-
-                        </div>
+                        <ul class="comments">
+                            <input type="text" class="form-control" placeholder="Add comment" data-id="{{post.getId()}}">
+                            {% for comment in post.getComments() %}
+                                <li>{{comment.getText()}}</li>
+                            {% endfor %}
+                        </ul>
                     </div>
+                    <hr>
                 {% endfor %}
 
                 {% if posts|length == 0 %}
@@ -41,10 +45,26 @@
               data: $('#post-form').serialize(),
               success: function(post)
               {
-                $('#posts').append('<div class="post"><p>'+post.content+'</p><div class="comments"></div></div>')
+                $('#posts').append('<div class="post"><p>'+post.content+'</p><ul class="comments"><input type="text" class="form-control" placeholder="Add comment" data-id="'+post.id+'"></ul></div><hr>')
               }
             });
           });
+
+          $('#posts').on('keypress', 'input', function (e) {
+            if (e.keyCode === 13 && $(this).val().length > 0) {
+              t = this;
+              $.ajax({
+                type: 'POST',
+                url: '/api/posts/'+$(this).data('id')+'/comments',
+                data: {comment: {text: $(this).val()}},
+                success: function(comment)
+                {
+                  $(t).parent().append('<li>'+comment.text+'</li>');
+                  $(t).val('');
+                }
+              });
+            }
+           })
         })
     </script>
 {% endblock %}
