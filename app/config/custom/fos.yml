@@ -5,3 +5,7 @@ fos_user:
     from_email:
         address: "noreply@system.com"
         sender_name: "system"
+
+    registration:
+        confirmation:
+            enabled: true
