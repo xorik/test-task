@@ -5,10 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Form\PostType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class PostController extends FOSRestController implements ClassResourceInterface
+class PostController extends FOSRestController
 {
     /**
      * @Rest\Post("/api/posts")
