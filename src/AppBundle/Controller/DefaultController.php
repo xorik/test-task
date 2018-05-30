@@ -30,7 +30,7 @@ class DefaultController extends Controller
      */
     public function postsAction(Request $request)
     {
-        $postForm = $this->createForm(PostType::class, new Post());
+        $postForm = $this->createForm(PostType::class, new Post($this->getUser()));
         $posts = $this->getDoctrine()->getRepository('AppBundle:Post')->findAll();
         
         return $this->render('default/posts.html.twig', [

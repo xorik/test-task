@@ -44,10 +44,18 @@ class Post
      */
     private $createdAt;
 
-    public function __construct()
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     */
+    private $author;
+
+    public function __construct(User $author)
     {
         $this->createdAt = new \DateTime();
         $this->comments = new ArrayCollection();
+        $this->author = $author;
     }
 
     /**
@@ -116,6 +124,11 @@ class Post
     public function addComment(Comment $comment)
     {
         $this->comments->add($comment);
+    }
+
+    public function getAuthor()
+    {
+        return $this->author;
     }
 }
 

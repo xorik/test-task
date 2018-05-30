@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Post;
 use AppBundle\Form\PostType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -15,7 +16,8 @@ class PostController extends FOSRestController
      */
     public function postPostAction(Request $request)
     {
-        $form = $this->createForm(PostType::class);
+        $post = new Post($this->getUser());
+        $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
